@@ -35,8 +35,8 @@
 
 **/
 
-var jsonPath = '~/weather-machine/weather-machine.json';
-var jsonBakPath = '~/weather-machine-config/weather-machine.bak.json';
+var jsonPath = '/home/pi/weather-machine/weather-machine.json';
+var jsonBakPath = '/home/pi/weather-machine-config/weather-machine.bak.json';
 
 var fs = require('fs');
 var clc = require('cli-color');
@@ -56,11 +56,18 @@ var maximums = {
 };
 
 var cliArgs = process.argv[2];
-var cliArgsMethod = cliArgs.split(':')[1];
+var cliArgsMethod; 
+
+if (typeof cliArgs !== 'undefined') {
+   cliArgsMethod =  cliArgs.split(':')[1];
+   switcher();
+} else {
+    generalError();
+}
 
 
 // Switch
-
+function switcher() {
 if (cliArgs.indexOf('reset') > 0) {
     reset(cliArgsMethod);
 }
@@ -82,7 +89,7 @@ else if (cliArgs.indexOf('list') > 0) {
 else {
     generalError();
 }
-
+}
 
 
 
