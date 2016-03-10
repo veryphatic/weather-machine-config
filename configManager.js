@@ -374,7 +374,8 @@ function reset(args) {
     switch(args) {
         case 'all':
             weatherMachineConfig = weatherMachineConfigBackup;
-            messageConsole('All parameters reset to default values:');
+            messageConsole('All parameters reset to default values.');
+            noticeMessage('You will need to re-pair the heart rate monitor paddles by grabbing them until the water pump starts up.');
             list();
             writeFile();
             break;
