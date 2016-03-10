@@ -32,11 +32,17 @@
  machine --heart:increase-rate
  machine --heart:decrease-rate
 
+ machine --light:increase-dimmer
+ machine --light:decrease-dimmer
+
 
 **/
 
 var jsonPath = '/home/pi/weather-machine/weather-machine.json';
 var jsonBakPath = '/home/pi/weather-machine-config/weather-machine.bak.json';
+
+// var jsonPath = 'weather-machine.json';
+// var jsonBakPath = 'weather-machine.bak.json';
 
 var fs = require('fs');
 var clc = require('cli-color');
@@ -52,22 +58,16 @@ var maximums = {
     FanDuration: 15000,
     BeatRate: 1,
     PumpDuration: 5000,
-    PumpInterval: 5000
+    PumpInterval: 5000,
+    Dimmer: 255
 };
 
 var cliArgs = process.argv[2];
-var cliArgsMethod; 
-
-if (typeof cliArgs !== 'undefined') {
-   cliArgsMethod =  cliArgs.split(':')[1];
-   switcher();
-} else {
-    generalError();
-}
+var cliArgsMethod = cliArgs.split(':')[1];
 
 
 // Switch
-function switcher() {
+
 if (cliArgs.indexOf('reset') > 0) {
     reset(cliArgsMethod);
 }
@@ -84,12 +84,16 @@ else if (cliArgs.indexOf('pump') > 0) {
     pump(cliArgsMethod);
 }
 else if (cliArgs.indexOf('list') > 0) {
+    messageConsole('All parameter values:');
     list();
+}
+else if (cliArgs.indexOf('light') > 0) {
+    light(cliArgsMethod);
 }
 else {
     generalError();
 }
-}
+
 
 
 
@@ -103,17 +107,14 @@ else {
  * @param amount
  * @returns {*}
  */
-function increase(node, amount) {
-
-    var newValue = Number(weatherMachineConfig[node]) + amount;
-    var maxValue = Number(maximums[node]);
-
-    if (weatherMachineConfig[node] <= maxValue && newValue <= maxValue) {
+function increase(value, amount, max) {
+    var newValue = Number(value) + amount;
+    if (value <= max && newValue <= max) {
         return newValue;
     }
     else {
         noticeMessage('You have reached the maximum value for this element. Please ask a question on the support site if you are having issues');
-        return maxValue;
+        return max;
     }
 
 }
@@ -125,11 +126,11 @@ function increase(node, amount) {
  * @param amount
  * @returns {number}
  */
-function decrease(node, amount) {
-    var newValue = Number(weatherMachineConfig[node] - amount);
+function decrease(value, amount) {
+    var newValue = Number(value - amount);
     var minValue = 0;
 
-    if (weatherMachineConfig[node] >= minValue && newValue >= minValue) {
+    if (value >= minValue && newValue >= minValue) {
         return newValue;
     }
     else {
@@ -137,6 +138,48 @@ function decrease(node, amount) {
         return minValue;
     }
 }
+
+
+
+/**
+ * Configure light dimmer
+ * @param args
+ * @options
+ * increase-dimmer
+ * decrease-dimmer
+ */
+function light(args) {
+    switch(args) {
+        case 'increase-dimmer':
+
+            var oldValue = weatherMachineConfig.S1Beat.Dimmer;
+            var newValue = increase(oldValue, 5, maximums.Dimmer).toFixed(0);
+
+            weatherMachineConfig.S1Beat.Dimmer = newValue;
+            weatherMachineConfig.S2Beat.Dimmer = newValue;
+
+            messageConsole('Light dimmer increased from ' + oldValue + ' to ' + newValue);
+
+            writeFile();
+            break;
+
+        case 'decrease-dimmer':
+            var oldValue = weatherMachineConfig.S1Beat.Dimmer;
+            var newValue = decrease(oldValue, 5).toFixed(0);
+            
+            weatherMachineConfig.S1Beat.Dimmer = newValue;
+            weatherMachineConfig.S2Beat.Dimmer = newValue;
+            
+            messageConsole('Light dimmer decreased from ' + oldValue + ' to ' + newValue);
+            writeFile();
+            break;
+
+        default:
+            generalError();
+            console.log('\r');
+    }
+}
+
 
 
 
@@ -157,7 +200,7 @@ function fog(args) {
 
         case 'increase-volume':
             var oldValue = weatherMachineConfig.SmokeVolume;
-            var newValue = increase('SmokeVolume', 5);
+            var newValue = increase(oldValue, 5, maximums.SmokeVolume);
             weatherMachineConfig.SmokeVolume = newValue;
             messageConsole('Fog volume increased from ' + oldValue + '% to ' + newValue + '%');
             writeFile();
@@ -165,7 +208,7 @@ function fog(args) {
 
         case 'decrease-volume':
             var oldValue = weatherMachineConfig.SmokeVolume;
-            var newValue = decrease('SmokeVolume', 5);
+            var newValue = decrease(oldValue, 5);
             weatherMachineConfig.SmokeVolume = newValue;
             messageConsole('Fog volume decreased from ' + oldValue + '% to ' + newValue + '%');
             writeFile();
@@ -173,7 +216,7 @@ function fog(args) {
 
         case 'increase-duration':
             var oldValue = weatherMachineConfig.SmokeDuration;
-            var newValue = increase('SmokeDuration', 100);
+            var newValue = increase(oldValue, 100, maximums.SmokeDuration);
             weatherMachineConfig.SmokeDuration = newValue;
             messageConsole('Fog duration increased from ' + oldValue/1000 + ' seconds to ' + newValue/1000 + ' seconds');
             writeFile();
@@ -181,7 +224,7 @@ function fog(args) {
 
         case 'decrease-duration':
             var oldValue = weatherMachineConfig.SmokeDuration;
-            var newValue = decrease('SmokeDuration', 100);
+            var newValue = decrease(oldValue, 100);
             weatherMachineConfig.SmokeDuration = newValue;
             messageConsole('Fog duration decreased from ' + oldValue/1000 + ' seconds to ' + newValue/1000 + ' seconds');
             writeFile();
@@ -189,7 +232,7 @@ function fog(args) {
 
         case 'increase-interval':
             var oldValue = weatherMachineConfig.SmokeInterval;
-            var newValue = increase('SmokeInterval', 500);
+            var newValue = increase(oldValue, 500, maximums.SmokeInterval);
             weatherMachineConfig.SmokeInterval = newValue;
             messageConsole('Fog interval increased from ' + oldValue/1000 + ' seconds to ' + newValue/1000 + ' seconds');
             writeFile();
@@ -197,7 +240,7 @@ function fog(args) {
 
         case 'decrease-interval':
             var oldValue = weatherMachineConfig.SmokeInterval;
-            var newValue = decrease('SmokeInterval', 500);
+            var newValue = decrease(oldValue, 500);
             weatherMachineConfig.SmokeInterval = newValue;
             messageConsole('Fog interval decreased from ' + oldValue/1000 + ' seconds to ' + newValue/1000 + ' seconds');
             writeFile();
@@ -221,7 +264,7 @@ function heart(args) {
     switch(args) {
         case 'increase-rate':
             var oldValue = weatherMachineConfig.BeatRate;
-            var newValue = (increase('BeatRate', .1)).toFixed(1);
+            var newValue = increase(oldValue, .1, maximums.BeatRate).toFixed(1);
             weatherMachineConfig.BeatRate = newValue;
             messageConsole('Fog interval increased from ' + oldValue*100 + '% to ' + newValue*100 + '%');
             writeFile();
@@ -229,7 +272,7 @@ function heart(args) {
 
         case 'decrease-rate':
             var oldValue = weatherMachineConfig.BeatRate;
-            var newValue = (decrease('BeatRate', .1)).toFixed(1);
+            var newValue = (decrease(oldValue, .1)).toFixed(1);
             weatherMachineConfig.BeatRate = newValue;
             messageConsole('Fog interval decreased from ' + oldValue*100 + '% to ' + newValue*100 + '%');
             writeFile();
@@ -253,7 +296,7 @@ function fan(args) {
     switch(args) {
         case 'increase-duration':
             var oldValue = weatherMachineConfig.FanDuration;
-            var newValue = increase('FanDuration', 1000);
+            var newValue = increase(oldValue, 1000, maximums.FanDuration);
             weatherMachineConfig.FanDuration = newValue;
             messageConsole('Fan duration increased from ' + oldValue/1000 + ' seconds to ' + newValue/1000 + ' seconds');
             writeFile();
@@ -261,7 +304,7 @@ function fan(args) {
 
         case 'decrease-duration':
             var oldValue = weatherMachineConfig.FanDuration;
-            var newValue = decrease('FanDuration', 1000);
+            var newValue = decrease(oldValue, 1000);
             weatherMachineConfig.FanDuration = newValue;
             messageConsole('Fan duration decreased from ' + oldValue/1000 + ' seconds to ' + newValue/1000 + ' seconds');
             writeFile();
@@ -288,7 +331,7 @@ function pump(args) {
     switch(args) {
         case 'increase-interval':
             var oldValue = weatherMachineConfig.PumpInterval;
-            var newValue = increase('PumpInterval', 500);
+            var newValue = increase(oldValue, 500, maximums.PumpInterval);
             weatherMachineConfig.PumpInterval = newValue;
             messageConsole('Pump interval increased from ' + oldValue/1000 + ' seconds to ' + newValue/1000 + ' seconds');
             writeFile();
@@ -296,7 +339,7 @@ function pump(args) {
 
         case 'decrease-interval':
             var oldValue = weatherMachineConfig.PumpInterval;
-            var newValue = decrease('PumpInterval', 500);
+            var newValue = decrease(oldValue, 500);
             weatherMachineConfig.PumpInterval = newValue;
             messageConsole('Fan interval decreased from ' + oldValue/1000 + ' seconds to ' + newValue/1000 + ' seconds');
             writeFile();
@@ -304,7 +347,7 @@ function pump(args) {
 
         case 'increase-duration':
             var oldValue = weatherMachineConfig.PumpDuration;
-            var newValue = increase('PumpDuration', 500);
+            var newValue = increase(oldValue, 500, maximums.PumpDuration);
             weatherMachineConfig.PumpDuration = newValue;
             messageConsole('Pump duration increased from ' + oldValue/1000 + ' seconds to ' + newValue/1000 + ' seconds');
             writeFile();
@@ -312,7 +355,7 @@ function pump(args) {
 
         case 'decrease-duration':
             var oldValue = weatherMachineConfig.PumpDuration;
-            var newValue = decrease('PumpDuration', 500);
+            var newValue = decrease(oldValue, 500);
             weatherMachineConfig.PumpDuration = newValue;
             messageConsole('Fan duration decreased from ' + oldValue/1000 + ' seconds to ' + newValue/1000 + ' seconds');
             writeFile();
@@ -334,14 +377,7 @@ function reset(args) {
         case 'all':
             weatherMachineConfig = weatherMachineConfigBackup;
             messageConsole('All parameters reset to default values:');
-            messageConsole('Fog Volume: ' + weatherMachineConfig.SmokeVolume + '%');
-            messageConsole('Fog Duration: ' + weatherMachineConfig.SmokeDuration/1000 + ' seconds');
-            messageConsole('Fog Interval: ' + weatherMachineConfig.SmokeInterval/1000 + ' seconds');
-            messageConsole('Heart beat rate: ' + weatherMachineConfig.BeatRate * 100 + '%');
-            messageConsole('Fan duration: ' + weatherMachineConfig.FanDuration / 1000 + ' seconds');
-            messageConsole('Pump duration: ' + weatherMachineConfig.PumpDuration / 1000 + ' seconds');
-            messageConsole('Pump interval: ' + weatherMachineConfig.PumpInterval / 1000 + ' seconds');
-
+            list();
             writeFile();
             break;
 
@@ -379,6 +415,13 @@ function reset(args) {
             writeFile();
             break;
 
+        case 'light': 
+            weatherMachineConfig.S1Beat.Dimmer = weatherMachineConfigBackup.S1Beat.Dimmer;
+            weatherMachineConfig.S2Beat.Dimmer = weatherMachineConfigBackup.S2Beat.Dimmer;
+            messageConsole('Light dimmer reset to default value:');
+            messageConsole('Dimmer value: ' + weatherMachineConfig.S1Beat.Dimmer);
+            break;
+
         default:
             generalError();
             console.log('\r');
@@ -386,11 +429,14 @@ function reset(args) {
 }
 
 
+
+
+
 /**
  * Print out the current values for everything
  */
 function list() {
-    messageConsole('All parameter values:');
+    
     messageConsole('Fog Volume: ' + weatherMachineConfig.SmokeVolume + '%');
     messageConsole('Fog Duration: ' + weatherMachineConfig.SmokeDuration/1000 + ' seconds');
     messageConsole('Fog Interval: ' + weatherMachineConfig.SmokeInterval/1000 + ' seconds');
@@ -398,6 +444,7 @@ function list() {
     messageConsole('Fan duration: ' + weatherMachineConfig.FanDuration / 1000 + ' seconds');
     messageConsole('Pump duration: ' + weatherMachineConfig.PumpDuration / 1000 + ' seconds');
     messageConsole('Pump interval: ' + weatherMachineConfig.PumpInterval / 1000 + ' seconds');
+    messageConsole('Light dimmer: ' + weatherMachineConfig.S1Beat.Dimmer);
 }
 
 

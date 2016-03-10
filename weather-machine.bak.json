@@ -1,31 +1,34 @@
-{"SmokeVolume":100,
+{
+  "SmokeVolume":100,
   "DeltaTSmoke":100,
   "DeltaTFan":10,
   "DeltaTPump":10,
-  "HRMMacAddress":"00:22:D0:85:92:65",
-  "GPIOPinFan":26,
-  "GPIOPinPump":13,
-  "GPIOPinLight":19,
+  "HRMMacAddress":0,
+  "I2CPinFan":1,
+  "I2CPinPump":0,
+  "I2CPinLight":2,
   "SmokeAddress":"/dev/ttyUSB0",
   "SmokeDuration":500,
   "FanDuration":12000,
   "BeatRate":0.9,
-  "S1Beat":{
+  "S1Beat": {
     "Red":10,
     "Green":10,
     "Blue":10,
     "Amber":50,
-    "Dimmer":80},
+    "Dimmer":30
+  },
   "S1Duration":500,
-  "S2Beat":{
+  "S2Beat": {
     "Red":10,
     "Green":10,
     "Blue":10,
     "Amber":50,
-    "Dimmer":80},
+    "Dimmer":30
+  },
   "S2Duration":50,
   "S1Pause":150,
-  "SmokeInterval":10000,
+  "SmokeInterval":8000,
   "PumpDuration":800,
   "PumpInterval":1000
 }
