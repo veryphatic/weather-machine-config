@@ -3,7 +3,7 @@
   "DeltaTSmoke":100,
   "DeltaTFan":10,
   "DeltaTPump":10,
-  "HRMMacAddress":0,
+  "HRMMacAddress":"0",
   "I2CPinFan":1,
   "I2CPinPump":0,
   "I2CPinLight":2,
