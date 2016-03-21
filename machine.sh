@@ -381,14 +381,14 @@ function reset(args) {
             noticeMessage('**** Notice the Raspberry Pi will reset in 10 seconds');
             messageConsole('You will need to re-pair the heart rate monitor paddles by grabbing them until the water pump starts up.');
             console.log('\r');
-            // list();
+            list();
             writeFile();
             
             setTimeout( function() {
                 //exec('sudo reboot',function(error, stdout, stderr) {});
-                exec('sudo reboot',function(error, stdout, stderr) {
-                    console.log(stdout);
-                });
+                //exec('sudo reboot',function(error, stdout, stderr) {
+                  //  console.log(stdout);
+                //});
             }, 10000);
 
             break;
