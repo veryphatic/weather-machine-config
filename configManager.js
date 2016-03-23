@@ -63,41 +63,44 @@ var maximums = {
 var cliArgs = process.argv[2];
 
 var cliArgsMethod = null;
-if cliArgs.length <= 0 {
+
+if (typeof(cliArgs) === 'undefined') {
     generalError();
 }
 else {
     cliArgsMethod = cliArgs.split(':')[1];
+
+    // Switch
+
+    if (cliArgs.indexOf('reset') > 0) {
+        reset(cliArgsMethod);
+    }
+    else if (cliArgs.indexOf('fog') > 0) {
+        fog(cliArgsMethod);
+    }
+    else if (cliArgs.indexOf('heart') > 0) {
+        heart(cliArgsMethod);
+    }
+    else if (cliArgs.indexOf('fan') > 0) {
+        fan(cliArgsMethod);
+    }
+    else if (cliArgs.indexOf('pump') > 0) {
+        pump(cliArgsMethod);
+    }
+    else if (cliArgs.indexOf('list') > 0) {
+        messageConsole('All parameter values:');
+        list();
+    }
+    else if (cliArgs.indexOf('light') > 0) {
+        light(cliArgsMethod);
+    }
+    else {
+        generalError();
+    }
 }
 
 
-// Switch
 
-if (cliArgs.indexOf('reset') > 0) {
-    reset(cliArgsMethod);
-}
-else if (cliArgs.indexOf('fog') > 0) {
-    fog(cliArgsMethod);
-}
-else if (cliArgs.indexOf('heart') > 0) {
-    heart(cliArgsMethod);
-}
-else if (cliArgs.indexOf('fan') > 0) {
-    fan(cliArgsMethod);
-}
-else if (cliArgs.indexOf('pump') > 0) {
-    pump(cliArgsMethod);
-}
-else if (cliArgs.indexOf('list') > 0) {
-    messageConsole('All parameter values:');
-    list();
-}
-else if (cliArgs.indexOf('light') > 0) {
-    light(cliArgsMethod);
-}
-else {
-    generalError();
-}
 
 
 

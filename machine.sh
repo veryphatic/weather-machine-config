@@ -65,7 +65,7 @@ var maximums = {
 var cliArgs = process.argv[2];
 
 var cliArgsMethod = null;
-if cliArgs.length <= 0 {
+if (cliArgs.length <= 0) {
     generalError();
 }
 else {
