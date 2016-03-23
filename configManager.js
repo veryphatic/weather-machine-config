@@ -487,8 +487,8 @@ function writeFile() {
  * General error message
  */
 function generalError() {
-    // console.log(clc.red('Sorry the parameters you passed were incorrect. Please check the spelling, the format and try again.'));
-    console.log('Sorry the parameters you passed were incorrect. Please check the spelling, the format and try again.');
+    console.log(clc.red('Sorry the parameters you passed were incorrect. Please check the spelling, the format and try again.'));
+    // console.log('Sorry the parameters you passed were incorrect. Please check the spelling, the format and try again.');
 }   
 
 
@@ -497,8 +497,8 @@ function generalError() {
  * @param msg
  */
 function messageConsole(msg) {
-    // console.log(clc.whiteBright(msg));
-    console.log(msg);
+    console.log(clc.whiteBright(msg));
+    // console.log(msg);
 }
 
 
@@ -507,7 +507,7 @@ function messageConsole(msg) {
  * @param msg
  */
 function noticeMessage(msg) {
-    // var col = clc.xterm(45);
-    // console.log(col(msg));
-    console.log(msg);
+    var col = clc.xterm(45);
+    console.log(col(msg));
+    // console.log(msg);
 }
