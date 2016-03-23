@@ -43,7 +43,7 @@ var jsonPath = 'weather-machine.json';
 var jsonBakPath = 'weather-machine.bak.json';
 
 var fs = require('fs');
-// var clc = require('cli-color');
+var clc = require('cli-color');
 var weatherMachineConfig = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
 var weatherMachineConfigBackup = JSON.parse(fs.readFileSync(jsonBakPath, 'utf8'));
 var exec = require('child_process').exec;
