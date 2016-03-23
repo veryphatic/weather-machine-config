@@ -115,7 +115,7 @@ installConfigTool() {
 	chmod 666 /home/pi/weather-machine/weather-machine.json
 
 	# install stop script
-	cp WeatherMachine2-stop.sh > /home/pi/weather-machine/WeatherMachine2-stop
+	cp WeatherMachine2-stop.sh /home/pi/weather-machine/WeatherMachine2-stop
 	chmod +x /home/pi/weather-machine/WeatherMachine2-stop
 
 	# install the shutdown button
@@ -130,7 +130,7 @@ setupMonit() {
 	cp weathermachine.monit /etc/monit/conf.d/weathermachine 
 
 	# uncomment the monit webserver lines
-	sed -i '/set httpd port 2812 and/,+5 s/^#//' monitrc
+	sed -i '/set httpd port 2812 and/,+5 s/^#//' /etc/monit/monitrc
 
 	# start monit
 	monit reload
@@ -143,8 +143,6 @@ restartSystem() {
 	read -p "Congratulations. The Raspberry Pi has completed installing the software. Please press [Enter] to reboot the system."
 	reboot
 }
-
-
 
 
 
