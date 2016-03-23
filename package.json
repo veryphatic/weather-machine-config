@@ -1,0 +1,22 @@
+{
+  "name": "config-tools",
+  "version": "1.0.0",
+  "description": "To see what directories are in the environment PATH",
+  "main": "configManager.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/veryphatic/weather-machine-config.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/veryphatic/weather-machine-config/issues"
+  },
+  "homepage": "https://github.com/veryphatic/weather-machine-config#readme",
+  "dependencies": {
+    "cli-color": "^1.1.0"
+  }
+}
