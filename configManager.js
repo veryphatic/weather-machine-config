@@ -43,7 +43,7 @@ var jsonPath = 'weather-machine.json';
 var jsonBakPath = 'weather-machine.bak.json';
 
 var fs = require('fs');
-var clc = require('cli-color');
+// var clc = require('cli-color');
 var weatherMachineConfig = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
 var weatherMachineConfigBackup = JSON.parse(fs.readFileSync(jsonBakPath, 'utf8'));
 var exec = require('child_process').exec;
@@ -61,7 +61,14 @@ var maximums = {
 };
 
 var cliArgs = process.argv[2];
-var cliArgsMethod = cliArgs.split(':')[1];
+
+var cliArgsMethod = null;
+if cliArgs.length <= 0 {
+    generalError();
+}
+else {
+    cliArgsMethod = cliArgs.split(':')[1];
+}
 
 
 // Switch
@@ -477,8 +484,9 @@ function writeFile() {
  * General error message
  */
 function generalError() {
-    console.log(clc.red('Sorry the parameters you passed were incorrect. Please check the spelling, the format and try again.'));
-}
+    // console.log(clc.red('Sorry the parameters you passed were incorrect. Please check the spelling, the format and try again.'));
+    console.log('Sorry the parameters you passed were incorrect. Please check the spelling, the format and try again.');
+}   
 
 
 /**
@@ -486,7 +494,8 @@ function generalError() {
  * @param msg
  */
 function messageConsole(msg) {
-    console.log(clc.whiteBright(msg));
+    // console.log(clc.whiteBright(msg));
+    console.log(msg);
 }
 
 
@@ -495,6 +504,7 @@ function messageConsole(msg) {
  * @param msg
  */
 function noticeMessage(msg) {
-    var col = clc.xterm(45);
-    console.log(col(msg));
+    // var col = clc.xterm(45);
+    // console.log(col(msg));
+    console.log(msg);
 }
