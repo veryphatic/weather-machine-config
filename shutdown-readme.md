@@ -5,5 +5,5 @@ vi ~/.bashrc
 
 add:
 
-sudo /home/pi/weather-machine-shutdown/shutdown.sh &
+sudo /home/pi/weather-machine-config/shutdown.sh &
 
