@@ -119,7 +119,8 @@ installConfigTool() {
 	chmod +x /home/pi/weather-machine/WeatherMachine2-stop
 
 	# install the shutdown button
-	echo 'sudo /home/pi/weather-machine-shutdown/shutdown.sh &' >> /home/pi/.bashrc
+	sudo chmod +x /home/pi/weather-machine-config/shutdown.sh
+	echo 'sudo /home/pi/weather-machine-config/shutdown.sh &' >> /home/pi/.bashrc
 }
 
 
@@ -134,7 +135,7 @@ setupMonit() {
 
 	# start monit
 	monit reload
-	monit
+	monit restart all
 }
 
 
