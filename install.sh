@@ -14,7 +14,6 @@ sleep 5s
 
 # install the dependencies
 installLibraries() {
-	sudo su
 	cd /home/pi
 	apt-get update && apt-get install -y git-core monit glib2.0 libdbus-1-dev libdbus-glib-1-dev libglib2.0-dev libical-dev libreadline-dev libudev-dev libusb-dev make
 }
@@ -135,7 +134,7 @@ setupMonit() {
 
 	# start monit
 	monit reload
-	monit restart all
+	monit start all
 }
 
 
@@ -149,6 +148,7 @@ restartSystem() {
 
 # installation path ....
 installLibraries
+setupi2c
 installGo
 setupBluez
 setupNodeJs
