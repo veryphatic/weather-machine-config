@@ -140,7 +140,7 @@ setupMonit() {
 
 #reboot
 restartSystem() {
-	read -p "Congratulations. The Raspberry Pi has completed installing the software. Please press [Enter] to reboot the system."
+	read -p "Congratulations. The Raspberry Pi has completed installing the software. Please press [Enter] to reboot the system." -n1 -s
 	reboot
 }
 
