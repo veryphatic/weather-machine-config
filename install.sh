@@ -27,10 +27,8 @@ setupi2c() {
 
 
 # install go
-# via http://dave.cheney.net/2015/09/04/building-go-1-5-on-the-raspberry-pi
 installGo() {
 	cd /home/pi
-	#wget http://dave.cheney.net/paste/go1.5.2.linux-arm.tar.gz
 	wget http://nathenstreet.com/files/smithsonian/go1.5.2.linux-arm.tar.gz
 	tar -C /usr/local -xzf go1.5.2.linux-arm.tar.gz
 	export PATH=$PATH:/usr/local/go/bin
