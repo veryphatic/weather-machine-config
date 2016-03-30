@@ -31,7 +31,7 @@ setupi2c() {
 installGo() {
 	cd /home/pi
 	#wget http://dave.cheney.net/paste/go1.5.2.linux-arm.tar.gz
-	wget http://nathenstreet.com/files/go1.5.2.linux-arm.tar.gz
+	wget http://nathenstreet.com/files/smithsonian/go1.5.2.linux-arm.tar.gz
 	tar -C /usr/local -xzf go1.5.2.linux-arm.tar.gz
 	export PATH=$PATH:/usr/local/go/bin
 
